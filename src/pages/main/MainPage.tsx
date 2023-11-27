@@ -8,7 +8,7 @@ import {TrendingNow} from "~/components/mainPageComponents/TrendingNow/trendingn
 
 export function MainPage() {
 
-    return (<BodyStyle>
+    return (<>
         <ContentContainer>
             <Searcher/>
             <TrendingNow/>
@@ -17,6 +17,6 @@ export function MainPage() {
             <AllTimePopular/>
             <Top100Anime/>
         </ContentContainer>
-        </BodyStyle>
+        </>
     )
 }

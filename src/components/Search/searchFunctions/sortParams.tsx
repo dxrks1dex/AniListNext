@@ -7,20 +7,20 @@ export const SortParams = (): MediaSort | undefined => {
   const { query } = useRouter()
   console.log(query.sort)
   const { operations: { setYear, setSeason } } = useSearchContext()
-  if (query.sort !== undefined && query.sort[1] === 'trending') {
+  if (query.sort !== undefined && query.sort[0] === 'trending') {
     return "TRENDING_DESC"
   }
-  if (query.sort !== undefined && query.sort[1] === 'this-season') {
+  if (query.sort !== undefined && query.sort[0] === 'this-season') {
     setYear('2023')
     setSeason('FALL')
     return "POPULARITY_DESC"
   }
-  if (query.sort !== undefined && query.sort[1] === 'next-season') {
+  if (query.sort !== undefined && query.sort[0] === 'next-season') {
     setYear('2024')
     setSeason('WINTER')
     return "POPULARITY_DESC"
   }
-  if (query.sort !== undefined && query.sort[1] === 'all-time-popular') {
+  if (query.sort !== undefined && query.sort[0] === 'all-time-popular') {
     return "POPULARITY_DESC"
   }
 }

@@ -8,6 +8,7 @@ import {useState} from "react";
 import {ReactQueryDevtools} from "react-query/devtools";
 import {MainPage} from "~/pages/main/MainPage";
 import {SearchContextWrapper} from "~/components/Search/hooks/SearchContext";
+import Layout from "~/pages/layout";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     const [queryClient] = useState(() => new QueryClient())
@@ -15,7 +16,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     return <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
             <SearchContextWrapper>
-            <Component {...pageProps} />
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
             </SearchContextWrapper>
         </Hydrate>
         <ReactQueryDevtools />

@@ -19,7 +19,10 @@ export const TrendingNow = (): JSX.Element => {
   const trendingArr = data?.Page?.media
   const trendingSplice = trendingArr?.slice(0, 5) as Array<NonNullable<typeof trendingArr[number]>>
 
-  return <><Link href='search/anime/trending'><ListName>TRENDING NOW <ViewAll>View All</ViewAll></ListName></Link>
+  return <><Link href={{
+    pathname: 'search/anime/[trending]',
+    query: {trending: 'trending'}
+  }}><ListName>TRENDING NOW <ViewAll>View All</ViewAll></ListName></Link>
     <AnimeSection>
         {trendingSplice?.map(item => <AnimeCard key={item?.id} {...item} />)}
     </AnimeSection>

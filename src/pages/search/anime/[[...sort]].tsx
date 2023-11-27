@@ -10,6 +10,7 @@ import {AnimeCard} from "~/components/AnimeCard/AnimeCard";
 import {useScrollListener} from "~/hooks/dom/useScrollListener";
 import {isElementAtBottomOfPage} from "~/utilits/dom/isElementAtBottomOfPage";
 import {Title} from "~/common/queryTitleStyle";
+import Link from "next/link";
 
 
 export default function TrendingNow () {
@@ -45,6 +46,7 @@ export default function TrendingNow () {
     if (error) return <>An error has occurred: {(error as Error).message}</>
 
     return <ContentContainer>
+        <Link href={'/'}>Home Page</Link>
         <Title>TRENDING ANIME</Title>
         <Searcher/>
         <SearchResultGrid>

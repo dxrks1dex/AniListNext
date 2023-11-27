@@ -180,7 +180,7 @@ export type ActivitySort =
 
 /** Activity type enum. */
 export type ActivityType =
-  /** A (anime) list update activity */
+  /** A anime list update activity */
   | 'ANIME_LIST'
   /** A manga list update activity */
   | 'MANGA_LIST'
@@ -194,10 +194,10 @@ export type ActivityType =
 /** Activity union type */
 export type ActivityUnion = ListActivity | MessageActivity | TextActivity;
 
-/** Notification for when an episode of (anime) airs */
+/** Notification for when an episode of anime airs */
 export type AiringNotification = {
   __typename?: 'AiringNotification';
-  /** The id of the aired (anime) */
+  /** The id of the aired anime */
   animeId: Scalars['Int']['output'];
   /** The notification context text */
   contexts?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
@@ -213,14 +213,14 @@ export type AiringNotification = {
   type?: Maybe<NotificationType>;
 };
 
-/** Score & Watcher stats for airing (anime) by episode and mid-week */
+/** Score & Watcher stats for airing anime by episode and mid-week */
 export type AiringProgression = {
   __typename?: 'AiringProgression';
   /** The episode the stats were recorded at. .5 is the mid point between 2 episodes airing dates. */
   episode?: Maybe<Scalars['Float']['output']>;
   /** The average score for the media */
   score?: Maybe<Scalars['Float']['output']>;
-  /** The amount of users watching the (anime) */
+  /** The amount of users watching the anime */
   watching?: Maybe<Scalars['Int']['output']>;
 };
 
@@ -286,7 +286,7 @@ export type AniChartUser = {
   user?: Maybe<User>;
 };
 
-/** A character that features in an (anime) or manga */
+/** A character that features in an anime or manga */
 export type Character = {
   __typename?: 'Character';
   /** The character's age. Note this is a string, not an int, it may contain further text and additional ages. */
@@ -322,13 +322,13 @@ export type Character = {
 };
 
 
-/** A character that features in an (anime) or manga */
+/** A character that features in an anime or manga */
 export type CharacterDescriptionArgs = {
   asHtml?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
-/** A character that features in an (anime) or manga */
+/** A character that features in an anime or manga */
 export type CharacterMediaArgs = {
   onList?: InputMaybe<Scalars['Boolean']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -445,7 +445,7 @@ export type CharacterSort =
   | 'ROLE_DESC'
   | 'SEARCH_MATCH';
 
-/** A submission for a character that features in an (anime) or manga */
+/** A submission for a character that features in an anime or manga */
 export type CharacterSubmission = {
   __typename?: 'CharacterSubmission';
   /** Data Mod assigned to handle the submission */
@@ -505,10 +505,10 @@ export type ExternalLinkType =
   | 'SOCIAL'
   | 'STREAMING';
 
-/** User's favourite (anime), manga, characters, staff & studios */
+/** User's favourite anime, manga, characters, staff & studios */
 export type Favourites = {
   __typename?: 'Favourites';
-  /** Favourite (anime) */
+  /** Favourite anime */
   anime?: Maybe<MediaConnection>;
   /** Favourite characters */
   characters?: Maybe<CharacterConnection>;
@@ -521,35 +521,35 @@ export type Favourites = {
 };
 
 
-/** User's favourite (anime), manga, characters, staff & studios */
+/** User's favourite anime, manga, characters, staff & studios */
 export type FavouritesAnimeArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
-/** User's favourite (anime), manga, characters, staff & studios */
+/** User's favourite anime, manga, characters, staff & studios */
 export type FavouritesCharactersArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
-/** User's favourite (anime), manga, characters, staff & studios */
+/** User's favourite anime, manga, characters, staff & studios */
 export type FavouritesMangaArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
-/** User's favourite (anime), manga, characters, staff & studios */
+/** User's favourite anime, manga, characters, staff & studios */
 export type FavouritesStaffArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
-/** User's favourite (anime), manga, characters, staff & studios */
+/** User's favourite anime, manga, characters, staff & studios */
 export type FavouritesStudiosArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
@@ -1032,7 +1032,7 @@ export type LikeableType =
 /** Likeable union type */
 export type LikeableUnion = ActivityReply | ListActivity | MessageActivity | TextActivity | Thread | ThreadComment;
 
-/** User list activity ((anime) & manga updates) */
+/** User list activity (anime & manga updates) */
 export type ListActivity = {
   __typename?: 'ListActivity';
   /** The time the activity was created at */
@@ -1110,11 +1110,11 @@ export type Media = {
   coverImage?: Maybe<MediaCoverImage>;
   /** Short description of the media's story and characters */
   description?: Maybe<Scalars['String']['output']>;
-  /** The general length of each (anime) episode in minutes */
+  /** The general length of each anime episode in minutes */
   duration?: Maybe<Scalars['Int']['output']>;
   /** The last official release date of the media */
   endDate?: Maybe<FuzzyDate>;
-  /** The amount of episodes the (anime) has when complete */
+  /** The amount of episodes the anime has when complete */
   episodes?: Maybe<Scalars['Int']['output']>;
   /** External links to another site related to the media */
   externalLinks?: Maybe<Array<Maybe<MediaExternalLink>>>;
@@ -1198,7 +1198,7 @@ export type Media = {
   trending?: Maybe<Scalars['Int']['output']>;
   /** The media's daily trend stats */
   trends?: Maybe<MediaTrendConnection>;
-  /** The type of the media; (anime) or manga */
+  /** The type of the media; anime or manga */
   type?: Maybe<MediaType>;
   /** When the media's data was last updated */
   updatedAt?: Maybe<Scalars['Int']['output']>;
@@ -1442,7 +1442,7 @@ export type MediaFormat =
   | 'MANGA'
   /** Anime movies with a theatrical release */
   | 'MOVIE'
-  /** Short (anime) released as a music video */
+  /** Short anime released as a music video */
   | 'MUSIC'
   /** Written books released as a series of light novels */
   | 'NOVEL'
@@ -1459,7 +1459,7 @@ export type MediaFormat =
   /** Anime which are under 15 minutes in length and broadcast on television */
   | 'TV_SHORT';
 
-/** List of (anime) or manga */
+/** List of anime or manga */
 export type MediaList = {
   __typename?: 'MediaList';
   /** Map of advanced scores with name keys */
@@ -1503,18 +1503,18 @@ export type MediaList = {
 };
 
 
-/** List of (anime) or manga */
+/** List of anime or manga */
 export type MediaListCustomListsArgs = {
   asArray?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
-/** List of (anime) or manga */
+/** List of anime or manga */
 export type MediaListScoreArgs = {
   format?: InputMaybe<ScoreFormat>;
 };
 
-/** List of (anime) or manga */
+/** List of anime or manga */
 export type MediaListCollection = {
   __typename?: 'MediaListCollection';
   /**
@@ -1536,18 +1536,18 @@ export type MediaListCollection = {
 };
 
 
-/** List of (anime) or manga */
+/** List of anime or manga */
 export type MediaListCollectionCustomListsArgs = {
   asArray?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
-/** List of (anime) or manga */
+/** List of anime or manga */
 export type MediaListCollectionStatusListsArgs = {
   asArray?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-/** List group of (anime) or manga entries */
+/** List group of anime or manga entries */
 export type MediaListGroup = {
   __typename?: 'MediaListGroup';
   /** Media list entries */
@@ -1561,7 +1561,7 @@ export type MediaListGroup = {
 /** A user's list options */
 export type MediaListOptions = {
   __typename?: 'MediaListOptions';
-  /** The user's (anime) list options */
+  /** The user's anime list options */
   animeList?: Maybe<MediaListTypeOptions>;
   /** The user's manga list options */
   mangaList?: Maybe<MediaListTypeOptions>;
@@ -1583,7 +1583,7 @@ export type MediaListOptions = {
   useLegacyLists?: Maybe<Scalars['Boolean']['output']>;
 };
 
-/** A user's list options for (anime) or manga lists */
+/** A user's list options for anime or manga lists */
 export type MediaListOptionsInput = {
   /** The names of the user's advanced scoring sections */
   advancedScoring?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -1647,7 +1647,7 @@ export type MediaListStatus =
   /** Re-watching/reading */
   | 'REPEATING';
 
-/** A user's list options for (anime) or manga lists */
+/** A user's list options for anime or manga lists */
 export type MediaListTypeOptions = {
   __typename?: 'MediaListTypeOptions';
   /** The names of the user's advanced scoring sections */
@@ -2003,7 +2003,7 @@ export type MediaTrend = {
   averageScore?: Maybe<Scalars['Int']['output']>;
   /** The day the data was recorded (timestamp) */
   date: Scalars['Int']['output'];
-  /** The episode number of the (anime) released on this day */
+  /** The episode number of the anime released on this day */
   episode?: Maybe<Scalars['Int']['output']>;
   /** The number of users with watching/reading the media */
   inProgress?: Maybe<Scalars['Int']['output']>;
@@ -2050,7 +2050,7 @@ export type MediaTrendSort =
   | 'TRENDING'
   | 'TRENDING_DESC';
 
-/** Media type enum, (anime) or manga. */
+/** Media type enum, anime or manga. */
 export type MediaType =
   /** Japanese Anime */
   | 'ANIME'
@@ -2129,7 +2129,7 @@ export type ModActionType =
 export type ModRole =
   /** An AniList administrator */
   | 'ADMIN'
-  /** An (anime) data moderator */
+  /** An anime data moderator */
   | 'ANIME_DATA'
   /** A character data moderator */
   | 'CHARACTER_DATA'
@@ -2139,7 +2139,7 @@ export type ModRole =
   | 'DEVELOPER'
   /** A discord community moderator */
   | 'DISCORD_COMMUNITY'
-  /** A lead (anime) data moderator */
+  /** A lead anime data moderator */
   | 'LEAD_ANIME_DATA'
   /** A lead community moderator */
   | 'LEAD_COMMUNITY'
@@ -2198,7 +2198,7 @@ export type Mutation = {
   ToggleActivityPin?: Maybe<ActivityUnion>;
   /** Toggle the subscription of an activity item */
   ToggleActivitySubscription?: Maybe<ActivityUnion>;
-  /** Favourite or unfavourite an (anime), manga, character, staff member, or studio */
+  /** Favourite or unfavourite an anime, manga, character, staff member, or studio */
   ToggleFavourite?: Maybe<Favourites>;
   /** Toggle the un/following of a user */
   ToggleFollow?: Maybe<User>;
@@ -2490,17 +2490,17 @@ export type NotificationType =
   | 'ACTIVITY_REPLY_LIKE'
   /** A user has replied to activity you have also replied to */
   | 'ACTIVITY_REPLY_SUBSCRIBED'
-  /** An (anime) you are currently watching has aired */
+  /** An anime you are currently watching has aired */
   | 'AIRING'
   /** A user has followed you */
   | 'FOLLOWING'
-  /** An (anime) or manga has had a data change that affects how a user may track it in their lists */
+  /** An anime or manga has had a data change that affects how a user may track it in their lists */
   | 'MEDIA_DATA_CHANGE'
-  /** An (anime) or manga on the user's list has been deleted from the site */
+  /** An anime or manga on the user's list has been deleted from the site */
   | 'MEDIA_DELETION'
   /** Anime or manga entries on the user's list have been merged into a single entry */
   | 'MEDIA_MERGE'
-  /** A new (anime) or manga has been added to the site where its related media is on the user's list */
+  /** A new anime or manga has been added to the site where its related media is on the user's list */
   | 'RELATED_MEDIA_ADDITION'
   /** A user has liked your forum comment */
   | 'THREAD_COMMENT_LIKE'
@@ -3356,7 +3356,7 @@ export type Report = {
   reporter?: Maybe<User>;
 };
 
-/** A Review that features in an (anime) or manga */
+/** A Review that features in an anime or manga */
 export type Review = {
   __typename?: 'Review';
   /** The main review body text */
@@ -3394,7 +3394,7 @@ export type Review = {
 };
 
 
-/** A Review that features in an (anime) or manga */
+/** A Review that features in an anime or manga */
 export type ReviewBodyArgs = {
   asHtml?: InputMaybe<Scalars['Boolean']['input']>;
 };
@@ -3788,7 +3788,7 @@ export type StaffStats = {
   timeWatched?: Maybe<Scalars['Int']['output']>;
 };
 
-/** A submission for a staff that features in an (anime) or manga */
+/** A submission for a staff that features in an anime or manga */
 export type StaffSubmission = {
   __typename?: 'StaffSubmission';
   /** Data Mod assigned to handle the submission */
@@ -3864,7 +3864,7 @@ export type StudioEdge = {
   favouriteOrder?: Maybe<Scalars['Int']['output']>;
   /** The id of the connection */
   id?: Maybe<Scalars['Int']['output']>;
-  /** If the studio is the main animation studio of the (anime) */
+  /** If the studio is the main animation studio of the anime */
   isMain: Scalars['Boolean']['output'];
   node?: Maybe<Studio>;
 };
@@ -4237,7 +4237,7 @@ export type User = {
   previousNames?: Maybe<Array<Maybe<UserPreviousName>>>;
   /** The url for the user page on the AniList website */
   siteUrl?: Maybe<Scalars['String']['output']>;
-  /** The users (anime) & manga list statistics */
+  /** The users anime & manga list statistics */
   statistics?: Maybe<UserStatisticTypes>;
   /**
    * The user's statistics
@@ -4562,7 +4562,7 @@ export type UserStats = {
   mangaListScores?: Maybe<ListScoreStats>;
   mangaScoreDistribution?: Maybe<Array<Maybe<ScoreDistribution>>>;
   mangaStatusDistribution?: Maybe<Array<Maybe<StatusDistribution>>>;
-  /** The amount of (anime) the user has watched in minutes */
+  /** The amount of anime the user has watched in minutes */
   watchedTime?: Maybe<Scalars['Int']['output']>;
 };
 

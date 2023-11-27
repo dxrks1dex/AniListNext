@@ -141,6 +141,26 @@ query MediaAnime($id: Int) {
         coverImage {
             extraLarge
         }
-
+        relations{
+            nodes{
+                id
+                title{
+                    romaji
+                }
+                coverImage{
+                    extraLarge
+                }
+            }
+            edges {
+                id
+                characters{
+                    name{
+                        full
+                    }
+                    id
+                }
+                characterRole
+            }
+        }
     }
 }

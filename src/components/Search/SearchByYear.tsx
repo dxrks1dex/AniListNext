@@ -1,4 +1,4 @@
-import React, { type ChangeEvent, type JSX, useRef, useState } from 'react'
+import React, {type ChangeEvent, type JSX, useEffect, useRef, useState} from 'react'
 import {useSearchResultQuery} from "~/enteris/anime/titleList.g";
 import { GenreOrTagStyleList } from './searchStyleComponents/genreOrTagStyleComponent'
 import { SearchButton, SearchInput, SearchSection, SearchSectionName } from './searchStyleComponents/searchStyle'
@@ -17,10 +17,7 @@ export const SearchByYear = (): JSX.Element => {
   const wrapperRef = useRef(null)
   useOutsideDetect(wrapperRef, setYearList)
 
-  const { isLoading, error, data } = useSearchResultQuery(
-    {
-    }
-  )
+  const { isLoading, error, data } = useSearchResultQuery()
   if (isLoading) return <>Loading...</>
   if (error) return <>An error has occurred: {(error as Error).message}</>
 
@@ -38,7 +35,6 @@ export const SearchByYear = (): JSX.Element => {
     if (mediaYear === year) {
       clearYear()
     } else {
-      addYearToUrl()
       setYear(mediaYear)
     }
     console.log(searchYear)

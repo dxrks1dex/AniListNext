@@ -38,6 +38,8 @@ export default function AnimePage (props: RouteProps): JSX.Element {
   if (!id) return <div>no id...</div>
   if (isLoading) return <div>Loading...</div>
 
+  const relations = data?.Media?.relations
+
   const AnimePageInfo = (info: string | null): void => {
     if (info === null) {
       push(`${id}/${name}`);
@@ -54,6 +56,12 @@ export default function AnimePage (props: RouteProps): JSX.Element {
     if (info === "social") {
       push(`${id}/${name}/social`, undefined, {scroll: false});
     }
+    if (info === "reviews") {
+      push(`${id}/${name}/reviews`, undefined, {scroll: false});
+    }
+    if (info === "watch") {
+      push(`${id}/${name}/watch`, undefined, {scroll: false});
+    }
   }
 
   return <AnimePageGrid>
@@ -61,18 +69,23 @@ export default function AnimePage (props: RouteProps): JSX.Element {
       <div>
         <BannerImage src={data?.Media?.bannerImage ?? ''} alt={''}/>
         <HeaderGrid>
-          <AnimeImage src={data?.Media?.coverImage?.extraLarge ?? ''} alt={''}/>
+          <div>
+            <AnimeImage src={data?.Media?.coverImage?.extraLarge ?? ''} alt={''}/>
+            <button>Add to List</button>
+          </div>
           <DescriptionGrid>
             <HeaderTitle>{data?.Media?.title?.romaji}</HeaderTitle>
             <HeaderDescription dangerouslySetInnerHTML={{ __html: data?.Media?.description ?? '' }}>{null}</HeaderDescription>
-          </DescriptionGrid>
           <NavBar>
             <StyledLink onClick={() => { AnimePageInfo(null) }}>Overview</StyledLink>
             <StyledLink onClick={() => { AnimePageInfo('characters') }}>Characters</StyledLink>
             <StyledLink onClick={() => { AnimePageInfo('staff') }}>Staff</StyledLink>
             <StyledLink onClick={() => { AnimePageInfo('stats') }}>Stats</StyledLink>
             <StyledLink onClick={() => { AnimePageInfo('social') }}>Social</StyledLink>
+            <StyledLink onClick={() => { AnimePageInfo('watch') }}>Watch</StyledLink>
+            <StyledLink onClick={() => { AnimePageInfo('reviews') }}>Reviews</StyledLink>
           </NavBar>
+          </DescriptionGrid>
         </HeaderGrid>
       </div>
     </AnimePageHeader>
@@ -90,7 +103,7 @@ export default function AnimePage (props: RouteProps): JSX.Element {
       </div>
     </LeftContent>
     <RightContent>
-      {AnimePageInfoReturn(info)}
+      {AnimePageInfoReturn({info, relations})}
       <div>{data?.Media?.characters?.edges?.map(char => char?.name)}</div>
     </RightContent>
     </AnimePageContent>
@@ -113,9 +126,14 @@ const BannerImage = styled.img`
   width: 100%;
 `
 const HeaderDescription = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
   &:hover{
     color: #99adbf;
     transition: 0.2s;
+    
+    overflow: initial;
   }
 `
 const HeaderTitle = styled.h1`
@@ -141,7 +159,7 @@ const AnimeImage = styled.img`
 
 const DescriptionGrid = styled.div`
   display: grid;
-  grid-template-rows: 30% 70%;
+  grid-template-rows: 30%;
 `
 const AnimePageContent = styled.div`
   display: grid;
@@ -188,9 +206,10 @@ const RightContent = styled.div`
 `
 
 const NavBar = styled.nav`
-  display: grid;
-  grid-template-rows: repeat(1fr);
-  grid-template-columns: repeat(1fr);
+  height: 10%;
+  
+  display: flex;
+  justify-content: space-around;
 `
 const StyledLink = styled.nav`
   color: #9FADBD;

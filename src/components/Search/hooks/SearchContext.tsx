@@ -4,7 +4,7 @@ import React, {
   type FC,
   type ReactNode, type SetStateAction,
   useCallback,
-  useContext,
+  useContext, useEffect,
   useMemo,
   useState
 } from 'react'
@@ -61,17 +61,20 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({ children }) 
     push({query: query})
     setCurrentPage(1)
   }, [])
+
   const clearSearch = useCallback((): void => {
     setSearch('')
     push({query: query})
     setCurrentPage(1)
   }, [])
+
   const clearGenresAndTags = useCallback((): void => {
     setGenres([])
     setTags([])
-    push({query: query})
+    push({ query: query });
     setCurrentPage(1)
   }, [])
+
   const clearYear = useCallback((): void => {
     setYear('')
     push({query: query})
@@ -81,7 +84,7 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({ children }) 
   const addSearchUrl = useCallback((): void => {
     const queryParams = { ...query, search: search };
 
-    if (query.sort === undefined) {
+    if (query.sort === undefined && search !== '') {
       push({
         pathname: 'search/anime/',
         query: queryParams,
@@ -95,12 +98,20 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({ children }) 
 
     setCurrentPage(1)
   }, [search])
+  useEffect(() => {
+    if (search !== '') {
+      addSearchUrl()
+    }
+    // else {
+    //   push({pathname})
+    // }
+  }, [search])
 
 
   const addYearToUrl = useCallback(() => {
-    const queryParams = { ...query, year: year };
+      const queryParams = { ...query, year: year };
 
-    if (query.sort === undefined) {
+      if (query.sort === undefined) {
       push({
         pathname: 'search/anime/',
         query: queryParams,
@@ -137,13 +148,13 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({ children }) 
     const queryParams = { ...query, genres: genres };
 
     if (query.sort === undefined) {
-          push({
-            pathname: 'search/anime/',
-            query: queryParams,
-          });
-    } else {
       push({
-        pathname,
+        pathname: 'search/anime/',
+        query: queryParams,
+      });
+    } else if(pathname.startsWith('search/anime/')) {
+      push({
+        // pathname,
         query: queryParams,
       });
     }
@@ -168,6 +179,15 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({ children }) 
 
     setCurrentPage(1)
   }, [tags])
+
+  useEffect(() => {
+    if (year !== '') {
+      addYearToUrl()
+    }
+    if (season !== undefined) {
+      addSeasonToUrl()
+    }
+  }, [year, season])
 
   const clearUrl = useCallback((): void => {
     push(`/`)
