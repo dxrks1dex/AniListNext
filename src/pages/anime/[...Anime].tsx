@@ -33,7 +33,8 @@ export default function AnimePage (props: RouteProps): JSX.Element {
 
   const { isLoading, data } = useMediaAnimeQuery(
       { id: Number(id) },
-      { enabled: !!id })
+      { enabled: !!id }
+  )
 
   if (!id) return <div>no id...</div>
   if (isLoading) return <div>Loading...</div>
@@ -103,7 +104,7 @@ export default function AnimePage (props: RouteProps): JSX.Element {
       </div>
     </LeftContent>
     <RightContent>
-      {AnimePageInfoReturn({info, relations})}
+      {AnimePageInfoReturn({info, relations, name})}
       <div>{data?.Media?.characters?.edges?.map(char => char?.name)}</div>
     </RightContent>
     </AnimePageContent>

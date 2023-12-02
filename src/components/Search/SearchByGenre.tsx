@@ -1,3 +1,5 @@
+'use client'
+
 import React, { type ChangeEvent, type JSX, useEffect, useRef, useState } from 'react'
 import { SearchButton, SearchInput, SearchSection, SearchSectionName } from './searchStyleComponents/searchStyle'
 
@@ -7,10 +9,12 @@ import { getSearchInputPlaceholder } from './searchFunctions/GetSearchInputPlace
 import { SelectOption } from './searchFunctions/SelectOption'
 import {useGenreAndTagCollectionQuery} from "~/enteris/anime/titleList.g";
 import {useOutsideDetect} from "~/hooks/common/useOutsideDetect";
+import {useRouter} from "next/router";
 
 export const SearchByGenre = (): JSX.Element => {
   const [isGenreAndTagListOpen, setIsGenreAndTagListOpen] = useState(false)
   const [searchTagOrGenre, setSearchTagOrGenre] = useState('')
+  const {pathname, query, push} = useRouter()
 
   const { data: { genres, tags }, operations: { setCurrentPage, setGenres, setTags, addTagUrl, addGenreUrl, clearGenresAndTags, clearUrl } } = useSearchContext()
 
@@ -41,6 +45,10 @@ export const SearchByGenre = (): JSX.Element => {
     mediaTag?.name.slice(0, searchTagOrGenre.length) === searchTagOrGenre
   )
 
+
+
+  const queryParams = {...query, genres: genres };
+
   const onGenreClick = (mediaGenre: string | null): void => {
     if (mediaGenre === null) {
       return
@@ -51,6 +59,29 @@ export const SearchByGenre = (): JSX.Element => {
     } else {
       setGenres((prevState) => [...prevState, mediaGenre])
       addGenreUrl()
+
+
+      // if (!pathname.startsWith('/search/anime')) {
+      //   push({
+      //     pathname: 'search/anime/',
+      //     query: queryParams,
+      //   });
+      //   console.log(pathname.startsWith('/search/anime'))
+      // } else if (query.sort !== undefined && query.sort[0] !== undefined){
+      //   push({
+      //     pathname: `/search/anime/${query.sort[0]}`,
+      //     query: queryParams
+      //   });
+      //   console.log(query)
+      // } else {
+      //   push ({
+      //     pathname: pathname,
+      //     query: queryParams
+      //   })
+      //   console.log('false way')
+      // }
+
+
     }
   }
   const onTagClick = (mediaTag: string): void => {
@@ -79,17 +110,6 @@ export const SearchByGenre = (): JSX.Element => {
     }
     return tags.includes(mediaTag)
   }
-
-  // useEffect(() => {
-  //   const urlParamsGenre = searchParams.get('genre')
-  //
-  //   if (urlParamsGenre !== null) {
-  //     const isUrlInclude = genres.includes(urlParamsGenre)
-  //     if (isUrlInclude) {
-  //       setGenres((prevState) => [...prevState, urlParamsGenre])
-  //     }
-  //   }
-  // }, [genres, searchParams, setGenres])
 
   return <div><SearchSectionName>Genre</SearchSectionName>
         <SearchSection onClick={() => { setIsGenreAndTagListOpen(true) }}>

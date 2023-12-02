@@ -20,7 +20,7 @@ export default function Overviewed({ relations }: props) {
                           <CardImg src={mediaItem?.coverImage?.extraLarge ?? ''} />
                           <RelationsName>{mediaItem?.title?.romaji}</RelationsName>
                       </Link>
-                          <div>Frist</div>
+                          <div>{mediaItem?.type}</div>
                   </RelationsCard>)
           }
       </OverviewedGrid>

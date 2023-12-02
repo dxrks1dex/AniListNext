@@ -144,6 +144,7 @@ query MediaAnime($id: Int) {
         relations{
             nodes{
                 id
+                type
                 title{
                     romaji
                 }

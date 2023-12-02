@@ -5,7 +5,7 @@ import {MediaSort} from "~/gql/types.g";
 
 export const SortParams = (): MediaSort | undefined => {
   const { query } = useRouter()
-  console.log(query.sort)
+  // console.log(query.sort)
   const { operations: { setYear, setSeason } } = useSearchContext()
   if (query.sort !== undefined && query.sort[0] === 'trending') {
     return "TRENDING_DESC"

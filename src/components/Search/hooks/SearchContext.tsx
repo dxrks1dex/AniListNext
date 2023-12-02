@@ -145,21 +145,34 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({ children }) 
   }, [season])
 
   const addGenreUrl = useCallback((): void => {
-    const queryParams = { ...query, genres: genres };
+    const queryParams = {...query, genres: genres };
 
-    if (query.sort === undefined) {
+    if (!pathname.startsWith('/search/anime')) {
       push({
         pathname: 'search/anime/',
         query: queryParams,
       });
-    } else if(pathname.startsWith('search/anime/')) {
+      console.log(pathname.startsWith('/search/anime'))
+    } else if (query.sort !== undefined && query.sort[0] !== undefined){
       push({
-        // pathname,
-        query: queryParams,
+        pathname: `/search/anime/${query.sort[0]}`,
+        query: queryParams
       });
+      console.log(query)
+    } else {
+      push ({
+        pathname: pathname,
+        query: queryParams
+      })
+      console.log('false way')
     }
 
     setCurrentPage(1);
+  }, [genres, pathname])
+  useEffect(() => {
+    if (genres.length !== 0) {
+      addGenreUrl()
+    }
   }, [genres])
 
   const addTagUrl = useCallback((): void => {

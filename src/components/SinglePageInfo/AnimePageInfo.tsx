@@ -1,13 +1,15 @@
 import { type JSX } from 'react'
 import Overviewed from "~/components/SinglePageInfo/components/Overviewed";
 import {MediaConnection} from "~/gql/types.g";
+import Watch from "~/components/SinglePageInfo/components/Watch";
 
 interface props {
   info: string | undefined,
-  relations: MediaConnection | null
+  relations: MediaConnection | null,
+  name: string
 }
 
-export const AnimePageInfoReturn = ({ info, relations }: props): JSX.Element | undefined => {
+export const AnimePageInfoReturn = ({ info, relations, name }: props): JSX.Element | undefined => {
 
   if (info === undefined) {
     return <Overviewed relations={relations} />;
@@ -25,7 +27,7 @@ export const AnimePageInfoReturn = ({ info, relations }: props): JSX.Element | u
     return <>social</>;
   }
   if (info === "watch") {
-    return <>watch</>;
+    return <Watch name={name}/>;
   }
   if (info === "reviews") {
     return <>reviews</>;
