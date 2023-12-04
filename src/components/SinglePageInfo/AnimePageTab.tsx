@@ -1,35 +1,39 @@
-import { type JSX } from 'react'
+import { type JSX } from "react";
 import Overviewed from "~/components/SinglePageInfo/components/Overviewed";
-import {MediaConnection} from "~/gql/types.g";
+import { MediaConnection } from "~/gql/types.g";
 import Watch from "~/components/SinglePageInfo/components/Watch";
+import { MediaAnimeQuery } from "~/enteris/anime/titleList.g";
 
 interface props {
-  info: string | undefined,
-  relations: MediaConnection | null,
-  name: string
+  tab: string | undefined;
+  relations: NonNullable<MediaAnimeQuery["Media"]>["relations"];
+  name: string | undefined;
 }
 
-export const AnimePageInfoReturn = ({ info, relations, name }: props): JSX.Element | undefined => {
-
-  if (info === undefined) {
+export const AnimePageTab = ({
+  tab,
+  relations,
+  name,
+}: props): JSX.Element | undefined => {
+  if (tab === undefined) {
     return <Overviewed relations={relations} />;
   }
-  if (info === "staff") {
+  if (tab === "staff") {
     return <>Staff</>;
   }
-  if (info === "characters") {
+  if (tab === "characters") {
     return <>characters</>;
   }
-  if (info === "stats") {
+  if (tab === "stats") {
     return <>stats</>;
   }
-  if (info === "social") {
+  if (tab === "social") {
     return <>social</>;
   }
-  if (info === "watch") {
-    return <Watch name={name}/>;
+  if (tab === "watch") {
+    return <Watch name={name} />;
   }
-  if (info === "reviews") {
+  if (tab === "reviews") {
     return <>reviews</>;
   }
 };

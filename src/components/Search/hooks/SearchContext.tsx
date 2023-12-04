@@ -2,118 +2,122 @@ import React, {
   createContext,
   type Dispatch,
   type FC,
-  type ReactNode, type SetStateAction,
+  type ReactNode,
+  type SetStateAction,
   useCallback,
-  useContext, useEffect,
+  useContext,
+  useEffect,
   useMemo,
-  useState
-} from 'react'
-import {MediaSeason} from "~/gql/types.g";
-import {useRouter} from "next/router";
+  useRef,
+  useState,
+} from "react";
+import { MediaSeason } from "~/gql/types.g";
+import { useRouter } from "next/router";
 
 interface ISearchContext {
   data: {
-    genres: string[]
-    tags: string[]
-    search: string
-    year: string
-    season: MediaSeason | undefined
-    currentPage: number
-  }
+    genres: string[];
+    tags: string[];
+    search: string;
+    year: string;
+    season: MediaSeason | undefined;
+    currentPage: number;
+  };
   operations: {
-    setSeason: Dispatch<SetStateAction<MediaSeason | undefined>>
-    clearSeason: () => void
+    setSeason: Dispatch<SetStateAction<MediaSeason | undefined>>;
+    clearSeason: () => void;
 
-    setTags: Dispatch<SetStateAction<string[]>>
-    setGenres: Dispatch<SetStateAction<string[]>>
-    clearGenresAndTags: () => void
+    setTags: Dispatch<SetStateAction<string[]>>;
+    setGenres: Dispatch<SetStateAction<string[]>>;
+    clearGenresAndTags: () => void;
 
-    setYear: Dispatch<SetStateAction<string>>
-    clearYear: () => void
+    setYear: Dispatch<SetStateAction<string>>;
+    clearYear: () => void;
 
-    setSearch: Dispatch<SetStateAction<string>>
-    clearSearch: () => void
+    setSearch: Dispatch<SetStateAction<string>>;
+    clearSearch: () => void;
 
-    addSearchUrl: () => void
-    addGenreUrl: () => void
-    addTagUrl: () => void
-    addYearToUrl: () => void
-    addSeasonToUrl: () => void
-    clearUrl: () => void
+    addSearchUrl: () => void;
+    addGenreUrl: () => void;
+    addTagUrl: () => void;
+    addYearToUrl: () => void;
+    addSeasonToUrl: () => void;
+    clearUrl: () => void;
 
-    setCurrentPage: Dispatch<React.SetStateAction<number>>
-  }
+    setCurrentPage: Dispatch<React.SetStateAction<number>>;
+  };
 }
 
-const SearchContext = createContext<ISearchContext | null>(null)
-export const SearchContextWrapper: FC<{ children: ReactNode }> = ({ children }) => {
-  const [genres, setGenres] = useState<string[]>([])
-  const [tags, setTags] = useState<string[]>([])
-  const [search, setSearch] = useState<string>('')
-  const [year, setYear] = useState<string>('')
-  const [season, setSeason] = useState<MediaSeason | undefined>(undefined)
+const SearchContext = createContext<ISearchContext | null>(null);
+export const SearchContextWrapper: FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [genres, setGenres] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [year, setYear] = useState<string>("");
+  const [season, setSeason] = useState<MediaSeason | undefined>(undefined);
   // const [searchParams, setSearchParams] = useSearchParams()
-  const { push, query, pathname }  = useRouter()
-  const [currentPage, setCurrentPage] = useState<number>(1)
+  const { push, query, pathname } = useRouter();
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const clearSeason = useCallback((): void => {
-    setSeason(undefined)
-    push({query: query})
-    setCurrentPage(1)
-  }, [])
+    setSeason(undefined);
+    push({ query: query });
+    setCurrentPage(1);
+  }, []);
 
   const clearSearch = useCallback((): void => {
-    setSearch('')
-    push({query: query})
-    setCurrentPage(1)
-  }, [])
+    setSearch("");
+    push({ query: query });
+    setCurrentPage(1);
+  }, []);
 
   const clearGenresAndTags = useCallback((): void => {
-    setGenres([])
-    setTags([])
+    setGenres([]);
+    setTags([]);
     push({ query: query });
-    setCurrentPage(1)
-  }, [])
+    setCurrentPage(1);
+  }, []);
 
   const clearYear = useCallback((): void => {
-    setYear('')
-    push({query: query})
-    setCurrentPage(1)
-  }, [])
+    setYear("");
+    push({ query: query });
+    setCurrentPage(1);
+  }, []);
 
   const addSearchUrl = useCallback((): void => {
-    const queryParams = { ...query, search: search };
-
-    if (query.sort === undefined && search !== '') {
-      push({
-        pathname: 'search/anime/',
-        query: queryParams,
-      });
-    } else {
-      push({
-        pathname,
-        query: queryParams,
-      });
-    }
-
-    setCurrentPage(1)
-  }, [search])
+    // const queryParams = { ...query, search: search };
+    //
+    // if (query.sort === undefined && search !== "") {
+    //   push({
+    //     pathname: "search/anime/",
+    //     query: queryParams,
+    //   });
+    // } else {
+    //   push({
+    //     pathname,
+    //     query: queryParams,
+    //   });
+    // }
+    //
+    // setCurrentPage(1);
+  }, [search]);
   useEffect(() => {
-    if (search !== '') {
-      addSearchUrl()
+    if (search !== "") {
+      addSearchUrl();
     }
     // else {
     //   push({pathname})
     // }
-  }, [search])
-
+  }, [search]);
 
   const addYearToUrl = useCallback(() => {
-      const queryParams = { ...query, year: year };
+    const queryParams = { ...query, year: year };
 
-      if (query.sort === undefined) {
+    if (query.sort === undefined) {
       push({
-        pathname: 'search/anime/',
+        pathname: "search/anime/",
         query: queryParams,
       });
     } else {
@@ -123,15 +127,15 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({ children }) 
       });
     }
 
-    setCurrentPage(1)
-  }, [year])
+    setCurrentPage(1);
+  }, [year]);
 
   const addSeasonToUrl = useCallback(() => {
     const queryParams = { ...query, season: season };
 
     if (query.sort === undefined) {
       push({
-        pathname: 'search/anime/',
+        pathname: "search/anime/",
         query: queryParams,
       });
     } else {
@@ -141,46 +145,64 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({ children }) 
       });
     }
 
-    setCurrentPage(1)
-  }, [season])
+    setCurrentPage(1);
+  }, [season]);
 
-  const addGenreUrl = useCallback((): void => {
-    const queryParams = {...query, genres: genres };
+  const addGenreUrl = useCallback((): void => {}, []);
 
-    if (!pathname.startsWith('/search/anime')) {
+  const pathnameRef = useRef(pathname);
+  pathnameRef.current = pathname;
+  const queryRef = useRef(query);
+  queryRef.current = query;
+
+  useEffect(() => {
+    if (
+      genres.length === 0
+      // && search.length === 0 && tags.length === 0
+    ) {
+      return;
+    }
+
+    const queryVal = queryRef.current;
+    const pathnameVal = pathnameRef.current;
+
+    const queryParams = { ...queryVal };
+
+    if (genres.length > 0) {
+      queryParams.genres = genres;
+      // queryParams.search = search;
+      // queryParams.tags = tags;
+
+      setCurrentPage(1);
+    }
+    if (!pathnameVal.startsWith("/search/anime")) {
       push({
-        pathname: 'search/anime/',
+        pathname: "search/anime/",
         query: queryParams,
       });
-      console.log(pathname.startsWith('/search/anime'))
-    } else if (query.sort !== undefined && query.sort[0] !== undefined){
+      console.log(pathnameVal.startsWith("/search/anime"));
+    } else if (queryVal.sort !== undefined && queryVal.sort[0] !== undefined) {
       push({
-        pathname: `/search/anime/${query.sort[0]}`,
-        query: queryParams
+        pathname: `/search/anime/${queryVal.sort[0]}`,
+        query: queryParams,
       });
-      console.log(query)
     } else {
-      push ({
-        pathname: pathname,
-        query: queryParams
-      })
-      console.log('false way')
+      push({
+        pathname: pathnameVal,
+        query: queryParams,
+      });
+      console.log("false way");
     }
 
     setCurrentPage(1);
-  }, [genres, pathname])
-  useEffect(() => {
-    if (genres.length !== 0) {
-      addGenreUrl()
-    }
-  }, [genres])
+  }, [genres, push]);
 
   const addTagUrl = useCallback((): void => {
     const queryParams = { ...query, tags: tags };
 
     if (query.sort === undefined) {
       push({
-        pathname: 'search/anime/',
+        pathname: "search/anime/",
         query: queryParams,
       });
     } else {
@@ -190,69 +212,87 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({ children }) 
       });
     }
 
-    setCurrentPage(1)
-  }, [tags])
+    setCurrentPage(1);
+  }, [tags]);
 
   useEffect(() => {
-    if (year !== '') {
-      addYearToUrl()
+    if (year !== "") {
+      addYearToUrl();
     }
     if (season !== undefined) {
-      addSeasonToUrl()
+      addSeasonToUrl();
     }
-  }, [year, season])
+  }, [year, season]);
 
   const clearUrl = useCallback((): void => {
-    push(`/`)
-    setCurrentPage(1)
-  }, [])
+    push(`/`);
+    setCurrentPage(1);
+  }, []);
 
-  const context: ISearchContext = useMemo(() => ({
-    data: {
+  const context: ISearchContext = useMemo(
+    () => ({
+      data: {
+        genres,
+        tags,
+        search,
+        season,
+        year,
+        currentPage,
+      },
+      operations: {
+        clearSearch,
+        setSearch,
+
+        clearYear,
+        setYear,
+
+        clearGenresAndTags,
+        setGenres,
+        setTags,
+
+        clearSeason,
+        setSeason,
+
+        addSearchUrl,
+        addGenreUrl,
+        addTagUrl,
+        addYearToUrl,
+        addSeasonToUrl,
+        clearUrl,
+
+        setCurrentPage,
+      },
+    }),
+    [
       genres,
       tags,
       search,
       season,
       year,
-      currentPage
-    },
-    operations: {
+      currentPage,
       clearSearch,
-      setSearch,
-
       clearYear,
-      setYear,
-
       clearGenresAndTags,
-      setGenres,
-      setTags,
-
       clearSeason,
-      setSeason,
-
       addSearchUrl,
       addGenreUrl,
       addTagUrl,
       addYearToUrl,
       addSeasonToUrl,
       clearUrl,
-
-      setCurrentPage
-    }
-  }), [genres, tags, search, season, year, currentPage, clearSearch, clearYear, clearGenresAndTags, clearSeason, addSearchUrl, addGenreUrl, addTagUrl, addYearToUrl, addSeasonToUrl, clearUrl])
+    ],
+  );
 
   return (
-      <SearchContext.Provider value={context}>
-        {children}
-      </SearchContext.Provider>
-  )
-}
+    <SearchContext.Provider value={context}>{children}</SearchContext.Provider>
+  );
+};
 
 export const useSearchContext = (): ISearchContext => {
-  const value = useContext(SearchContext)
+  const value = useContext(SearchContext);
   if (value === null) {
-    throw new Error('empty SearchContext')
+    throw new Error("empty SearchContext");
   }
 
-  return value
-}
+  return value;
+};

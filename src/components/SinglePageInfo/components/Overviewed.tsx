@@ -1,58 +1,56 @@
 import styled from "styled-components";
-import {MediaConnection} from "~/gql/types.g";
 import Link from "next/link";
+import { MediaAnimeQuery } from "~/enteris/anime/titleList.g";
 interface props {
-    relations: MediaConnection | null
+  relations: NonNullable<MediaAnimeQuery["Media"]>["relations"];
 }
 export default function Overviewed({ relations }: props) {
-
   return (
     <>
       Relations
       <OverviewedGrid>
-          {
-              relations?.nodes?.map(mediaItem =>
-                  <RelationsCard>
-                      <Link href={{
-                          pathname: `[id]/[name]`,
-                          query: {id: mediaItem?.id, name: mediaItem?.title?.romaji}
-                      }}>
-                          <CardImg src={mediaItem?.coverImage?.extraLarge ?? ''} />
-                          <RelationsName>{mediaItem?.title?.romaji}</RelationsName>
-                      </Link>
-                          <div>{mediaItem?.type}</div>
-                  </RelationsCard>)
-          }
+        {relations?.nodes?.map((mediaItem) => (
+          <RelationsCard>
+            <Link
+              href={{
+                pathname: `[id]/[name]`,
+                query: { id: mediaItem?.id, name: mediaItem?.title?.romaji },
+              }}
+            >
+              <CardImg src={mediaItem?.coverImage?.extraLarge ?? ""} />
+              <RelationsName>{mediaItem?.title?.romaji}</RelationsName>
+            </Link>
+            <div>{mediaItem?.type}</div>
+          </RelationsCard>
+        ))}
       </OverviewedGrid>
     </>
   );
 }
 
-
-const OverviewedGrid = styled.div `
+const OverviewedGrid = styled.div`
   display: grid;
 
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   background-color: #0b1622;
-
-`
-const RelationsCard = styled.section `
+`;
+const RelationsCard = styled.section`
   color: lightgrey;
-  
-  background-color: #151F2E;
+
+  background-color: #151f2e;
 
   display: flex;
-  
-  border-radius: 5px;
-`
 
-const CardImg = styled.img `
+  border-radius: 5px;
+`;
+
+const CardImg = styled.img`
   height: 115px;
   width: 85px;
-`
+`;
 const RelationsName = styled.span`
-  color: #9FADBD;
+  color: #9fadbd;
 
   &:hover {
     color: #61dafb;
@@ -60,4 +58,4 @@ const RelationsName = styled.span`
   }
 
   text-decoration: none;
-`
+`;
