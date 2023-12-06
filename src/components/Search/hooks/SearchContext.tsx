@@ -37,11 +37,6 @@ interface ISearchContext {
     setSearch: Dispatch<SetStateAction<string>>;
     clearSearch: () => void;
 
-    addSearchUrl: () => void;
-    addGenreUrl: () => void;
-    addTagUrl: () => void;
-    addYearToUrl: () => void;
-    addSeasonToUrl: () => void;
     clearUrl: () => void;
 
     setCurrentPage: Dispatch<React.SetStateAction<number>>;
@@ -86,68 +81,6 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({
     setCurrentPage(1);
   }, []);
 
-  const addSearchUrl = useCallback((): void => {
-    // const queryParams = { ...query, search: search };
-    //
-    // if (query.sort === undefined && search !== "") {
-    //   push({
-    //     pathname: "search/anime/",
-    //     query: queryParams,
-    //   });
-    // } else {
-    //   push({
-    //     pathname,
-    //     query: queryParams,
-    //   });
-    // }
-    //
-    // setCurrentPage(1);
-  }, [search]);
-  useEffect(() => {
-    if (search !== "") {
-      addSearchUrl();
-    }
-    // else {
-    //   push({pathname})
-    // }
-  }, [search]);
-
-  const addYearToUrl = useCallback(() => {
-    const queryParams = { ...query, year: year };
-
-    if (query.sort === undefined) {
-      push({
-        pathname: "search/anime/",
-        query: queryParams,
-      });
-    } else {
-      push({
-        pathname,
-        query: queryParams,
-      });
-    }
-
-    setCurrentPage(1);
-  }, [year]);
-
-  const addSeasonToUrl = useCallback(() => {
-    const queryParams = { ...query, season: season };
-
-    if (query.sort === undefined) {
-      push({
-        pathname: "search/anime/",
-        query: queryParams,
-      });
-    } else {
-      push({
-        pathname,
-        query: queryParams,
-      });
-    }
-
-    setCurrentPage(1);
-  }, [season]);
-
   const addGenreUrl = useCallback((): void => {}, []);
 
   const pathnameRef = useRef(pathname);
@@ -157,8 +90,11 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     if (
-      genres.length === 0
-      // && search.length === 0 && tags.length === 0
+      genres.length === 0 &&
+      search === "" &&
+      tags.length === 0 &&
+      year === "" &&
+      season === undefined
     ) {
       return;
     }
@@ -170,11 +106,24 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({
 
     if (genres.length > 0) {
       queryParams.genres = genres;
-      // queryParams.search = search;
-      // queryParams.tags = tags;
-
-      setCurrentPage(1);
     }
+
+    if (search.length > 0) {
+      queryParams.search = search;
+    }
+
+    if (tags.length > 0) {
+      queryParams.tags = tags;
+    }
+
+    if (year.length > 0) {
+      queryParams.year = year;
+    }
+
+    if (season !== undefined) {
+      queryParams.season = season;
+    }
+
     if (!pathnameVal.startsWith("/search/anime")) {
       push({
         pathname: "search/anime/",
@@ -195,34 +144,7 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({
     }
 
     setCurrentPage(1);
-  }, [genres, push]);
-
-  const addTagUrl = useCallback((): void => {
-    const queryParams = { ...query, tags: tags };
-
-    if (query.sort === undefined) {
-      push({
-        pathname: "search/anime/",
-        query: queryParams,
-      });
-    } else {
-      push({
-        pathname,
-        query: queryParams,
-      });
-    }
-
-    setCurrentPage(1);
-  }, [tags]);
-
-  useEffect(() => {
-    if (year !== "") {
-      addYearToUrl();
-    }
-    if (season !== undefined) {
-      addSeasonToUrl();
-    }
-  }, [year, season]);
+  }, [genres, search, season, tags, year]);
 
   const clearUrl = useCallback((): void => {
     push(`/`);
@@ -253,11 +175,7 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({
         clearSeason,
         setSeason,
 
-        addSearchUrl,
         addGenreUrl,
-        addTagUrl,
-        addYearToUrl,
-        addSeasonToUrl,
         clearUrl,
 
         setCurrentPage,
@@ -274,11 +192,7 @@ export const SearchContextWrapper: FC<{ children: ReactNode }> = ({
       clearYear,
       clearGenresAndTags,
       clearSeason,
-      addSearchUrl,
       addGenreUrl,
-      addTagUrl,
-      addYearToUrl,
-      addSeasonToUrl,
       clearUrl,
     ],
   );

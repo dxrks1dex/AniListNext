@@ -1,25 +1,42 @@
-import React, { type ChangeEvent, type JSX } from 'react'
+import React, { type ChangeEvent, type JSX } from "react";
 
-import { SearchInput, SearchSection, SearchSectionName } from './searchStyleComponents/searchStyle'
-import { useSearchContext } from './hooks/SearchContext'
+import {
+  SearchInput,
+  SearchSection,
+  SearchSectionName,
+} from "./searchStyleComponents/searchStyle";
+import { useSearchContext } from "./hooks/SearchContext";
 
 export const SearchByName = (): JSX.Element => {
-  const { operations: { setSearch, clearSearch, clearUrl, addSearchUrl }, data: { search } } = useSearchContext()
+  const {
+    operations: { setSearch, clearSearch, clearUrl },
+    data: { search },
+  } = useSearchContext();
 
   const onNameFound = (event: ChangeEvent<HTMLInputElement>): void => {
-    setSearch(event.target.value)
-    addSearchUrl()
-  }
+    setSearch(event.target.value);
+  };
 
-  return <div><SearchSectionName>Search</SearchSectionName>
+  return (
+    <div>
+      <SearchSectionName>Search</SearchSectionName>
       <SearchSection>
-          <SearchInput value={search} onChange={ onNameFound }/>
-          {search !== ''
-            ? <button onClick={(e) => { clearSearch(); e.preventDefault(); clearUrl() }}>X</button>
-            : null}
+        <SearchInput value={search} onChange={onNameFound} />
+        {search !== "" ? (
+          <button
+            onClick={(e) => {
+              clearSearch();
+              e.preventDefault();
+              clearUrl();
+            }}
+          >
+            X
+          </button>
+        ) : null}
       </SearchSection>
     </div>
-}
+  );
+};
 
 // import React, { type JSX, useState } from 'react'
 // import { useTop100Query } from '../anilist.g'

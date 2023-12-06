@@ -18,7 +18,7 @@ export const SearchBySeason = (): JSX.Element => {
 
   const {
     data: { season },
-    operations: { setSeason, clearSeason, addSeasonToUrl },
+    operations: { setSeason, clearSeason },
   } = useSearchContext();
 
   const wrapperRef = useRef(null);
@@ -39,7 +39,6 @@ export const SearchBySeason = (): JSX.Element => {
       clearSeason();
       return;
     }
-    addSeasonToUrl();
     setSeason(mediaSeason);
   };
 
@@ -92,7 +91,10 @@ export const SearchBySeason = (): JSX.Element => {
                   onSeasonClick(mediaSeason ?? undefined);
                 }}
                 selected={isSeasonSelect(mediaSeason ?? undefined)}
-              />
+              >
+                {mediaSeason.slice(0, 1) +
+                  mediaSeason.slice(1, mediaSeason.lenght).toLowerCase()}
+              </SelectOption>
             ))}
           </>
         </GenreOrTagStyleList>

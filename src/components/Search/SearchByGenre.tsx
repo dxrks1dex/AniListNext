@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  type ChangeEvent,
-  type JSX,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { type ChangeEvent, type JSX, useRef, useState } from "react";
 import {
   SearchButton,
   SearchInput,
@@ -30,24 +24,8 @@ export const SearchByGenre = (): JSX.Element => {
 
   const {
     data: { genres, tags },
-    operations: {
-      setCurrentPage,
-      setGenres,
-      setTags,
-      addTagUrl,
-      addGenreUrl,
-      clearGenresAndTags,
-    },
+    operations: { setCurrentPage, setGenres, setTags, clearGenresAndTags },
   } = useSearchContext();
-
-  useEffect(() => {
-    if (genres.length > 0) {
-      addGenreUrl();
-    }
-    if (tags.length > 0) {
-      addTagUrl();
-    }
-  }, [addGenreUrl, addTagUrl, genres.length, tags.length]);
 
   const wrapperRef = useRef(null);
   useOutsideDetect(wrapperRef, setIsGenreAndTagListOpen);
@@ -89,7 +67,6 @@ export const SearchByGenre = (): JSX.Element => {
       setCurrentPage(1);
     } else {
       setTags((prevState) => [...prevState, mediaTag]);
-      addTagUrl();
     }
   };
 
