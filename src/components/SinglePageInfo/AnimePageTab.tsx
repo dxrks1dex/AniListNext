@@ -1,19 +1,27 @@
-import { type JSX } from "react";
+import React, { Dispatch, type JSX } from "react";
 import Overviewed from "~/components/SinglePageInfo/components/Overviewed";
-import { MediaConnection } from "~/gql/types.g";
 import Watch from "~/components/SinglePageInfo/components/Watch";
 import { MediaAnimeQuery } from "~/enteris/anime/titleList.g";
+import Characters from "~/components/SinglePageInfo/components/Characters";
 
 interface props {
   tab: string | undefined;
   relations: NonNullable<MediaAnimeQuery["Media"]>["relations"];
   name: string | undefined;
+  chars: NonNullable<MediaAnimeQuery["Media"]>["characters"];
+  setCurrentPage: Dispatch<React.SetStateAction<number>>;
+  isFetching: boolean;
+  currentPage: number;
 }
 
 export const AnimePageTab = ({
   tab,
   relations,
   name,
+  chars,
+  setCurrentPage,
+  isFetching,
+  currentPage,
 }: props): JSX.Element | undefined => {
   if (tab === undefined) {
     return <Overviewed relations={relations} />;
@@ -22,7 +30,14 @@ export const AnimePageTab = ({
     return <>Staff</>;
   }
   if (tab === "characters") {
-    return <>characters</>;
+    return (
+      <Characters
+        currentPage={currentPage}
+        isFetching={isFetching}
+        setCurrentPage={setCurrentPage}
+        chars={chars}
+      />
+    );
   }
   if (tab === "stats") {
     return <>stats</>;

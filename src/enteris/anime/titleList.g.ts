@@ -47,10 +47,12 @@ export type SearchResultQuery = { __typename?: 'Query', Page?: { __typename?: 'P
 
 export type MediaAnimeQueryVariables = Types.Exact<{
   id?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  language?: Types.InputMaybe<Types.StaffLanguage>;
 }>;
 
 
-export type MediaAnimeQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', id: number, description?: string | null, season?: Types.MediaSeason | null, seasonYear?: number | null, type?: Types.MediaType | null, format?: Types.MediaFormat | null, status?: Types.MediaStatus | null, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, meanScore?: number | null, averageScore?: number | null, popularity?: number | null, favourites?: number | null, genres?: Array<string | null> | null, bannerImage?: string | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null } | null, tags?: Array<{ __typename?: 'MediaTag', name: string, rank?: number | null, description?: string | null } | null> | null, characters?: { __typename?: 'CharacterConnection', edges?: Array<{ __typename?: 'CharacterEdge', id?: number | null, role?: Types.CharacterRole | null, name?: string | null, voiceActors?: Array<{ __typename?: 'Staff', id: number, language?: string | null, name?: { __typename?: 'StaffName', userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null } | null } | null> | null, node?: { __typename?: 'Character', id: number, name?: { __typename?: 'CharacterName', userPreferred?: string | null } | null, image?: { __typename?: 'CharacterImage', large?: string | null } | null } | null } | null> | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null } | null, relations?: { __typename?: 'MediaConnection', nodes?: Array<{ __typename?: 'Media', id: number, type?: Types.MediaType | null, title?: { __typename?: 'MediaTitle', romaji?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null } | null } | null> | null, edges?: Array<{ __typename?: 'MediaEdge', id?: number | null, characterRole?: Types.CharacterRole | null, characters?: Array<{ __typename?: 'Character', id: number, name?: { __typename?: 'CharacterName', full?: string | null } | null } | null> | null } | null> | null } | null } | null };
+export type MediaAnimeQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', id: number, description?: string | null, season?: Types.MediaSeason | null, seasonYear?: number | null, type?: Types.MediaType | null, format?: Types.MediaFormat | null, status?: Types.MediaStatus | null, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, meanScore?: number | null, averageScore?: number | null, popularity?: number | null, favourites?: number | null, genres?: Array<string | null> | null, bannerImage?: string | null, characters?: { __typename?: 'CharacterConnection', edges?: Array<{ __typename?: 'CharacterEdge', id?: number | null, role?: Types.CharacterRole | null, name?: string | null, voiceActorRoles?: Array<{ __typename?: 'StaffRoleType', roleNotes?: string | null, dubGroup?: string | null, voiceActor?: { __typename?: 'Staff', id: number, language?: string | null, name?: { __typename?: 'StaffName', userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null } | null } | null } | null> | null, node?: { __typename?: 'Character', id: number, name?: { __typename?: 'CharacterName', userPreferred?: string | null } | null, image?: { __typename?: 'CharacterImage', large?: string | null } | null } | null } | null> | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null } | null, tags?: Array<{ __typename?: 'MediaTag', name: string, rank?: number | null, description?: string | null } | null> | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null } | null, relations?: { __typename?: 'MediaConnection', nodes?: Array<{ __typename?: 'Media', id: number, type?: Types.MediaType | null, title?: { __typename?: 'MediaTitle', romaji?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null } | null } | null> | null, edges?: Array<{ __typename?: 'MediaEdge', id?: number | null, characterRole?: Types.CharacterRole | null, characters?: Array<{ __typename?: 'Character', id: number, name?: { __typename?: 'CharacterName', full?: string | null } | null } | null> | null } | null> | null } | null } | null };
 
 
 
@@ -270,8 +272,38 @@ export const useSearchResultQuery = <
     )};
 
 export const MediaAnimeDocument = `
-    query MediaAnime($id: Int) {
+    query MediaAnime($id: Int, $page: Int, $language: StaffLanguage) {
   Media(id: $id, type: ANIME) {
+    characters(sort: [ROLE, RELEVANCE, ID], page: $page) {
+      edges {
+        id
+        role
+        name
+        voiceActorRoles(sort: [RELEVANCE, ID], language: $language) {
+          roleNotes
+          dubGroup
+          voiceActor {
+            id
+            name {
+              userPreferred
+            }
+            language: languageV2
+            image {
+              large
+            }
+          }
+        }
+        node {
+          id
+          name {
+            userPreferred
+          }
+          image {
+            large
+          }
+        }
+      }
+    }
     id
     description
     season
@@ -299,32 +331,6 @@ export const MediaAnimeDocument = `
       description
     }
     bannerImage
-    characters(perPage: 6) {
-      edges {
-        id
-        role
-        name
-        voiceActors(language: JAPANESE) {
-          id
-          name {
-            userPreferred
-          }
-          language: languageV2
-          image {
-            large
-          }
-        }
-        node {
-          id
-          name {
-            userPreferred
-          }
-          image {
-            large
-          }
-        }
-      }
-    }
     coverImage {
       extraLarge
     }

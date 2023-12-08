@@ -10,7 +10,7 @@ export default function Overviewed({ relations }: props) {
       Relations
       <OverviewedGrid>
         {relations?.nodes?.map((mediaItem) => (
-          <RelationsCard>
+          <RelationsCard key={mediaItem?.id}>
             <Link
               href={{
                 pathname: `[id]/[name]`,

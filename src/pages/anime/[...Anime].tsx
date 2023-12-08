@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { GetStaticPaths } from "next";
 import { AnimePageTab } from "~/components/SinglePageInfo/AnimePageTab";
 import { useCallback } from "react";
+import { useSearchContext } from "~/components/Search/hooks/SearchContext";
+import { language } from "~/components/SinglePageInfo/components/CharactersFunc/language";
 
 type RouteProps = { params?: { Anime: string[] } };
 
@@ -22,8 +24,12 @@ export const getStaticPaths: GetStaticPaths<
   };
 };
 
-export default function AnimePage(props: RouteProps): JSX.Element {
-  // const { id } = useSearchParams()
+export default function AnimePage(props: RouteProps) {
+  const {
+    data: { currentPage },
+    operations: { setCurrentPage },
+  } = useSearchContext();
+
   const { push } = useRouter();
 
   const id = props.params?.Anime[0];
@@ -41,21 +47,24 @@ export default function AnimePage(props: RouteProps): JSX.Element {
     [id, name, push],
   );
 
-  const { isLoading, data } = useMediaAnimeQuery(
-    { id: Number(id) },
-    { enabled: !!id },
+  const { isLoading, data, isFetching } = useMediaAnimeQuery(
+    { id: Number(id), page: currentPage, language: language() },
+    { enabled: !!id, keepPreviousData: true },
   );
 
   if (!id) return <div>no id...</div>;
   if (isLoading) return <div>Loading...</div>;
 
   const relations = data?.Media?.relations;
+  const chars = data?.Media?.characters;
 
   return (
     <AnimePageGrid>
       <AnimePageHeader>
         <div>
-          <BannerImage src={data?.Media?.bannerImage ?? ""} alt={""} />
+          {data?.Media?.bannerImage === null ? null : (
+            <BannerImage src={data?.Media?.bannerImage ?? ""} />
+          )}
           <HeaderGrid>
             <div>
               <AnimeImage
@@ -80,6 +89,7 @@ export default function AnimePage(props: RouteProps): JSX.Element {
                 <StyledLink
                   onClick={() => {
                     pushInfoUrl("characters");
+                    setCurrentPage(1);
                   }}
                 >
                   Characters
@@ -87,6 +97,7 @@ export default function AnimePage(props: RouteProps): JSX.Element {
                 <StyledLink
                   onClick={() => {
                     pushInfoUrl("staff");
+                    setCurrentPage(1);
                   }}
                 >
                   Staff
@@ -94,6 +105,7 @@ export default function AnimePage(props: RouteProps): JSX.Element {
                 <StyledLink
                   onClick={() => {
                     pushInfoUrl("stats");
+                    setCurrentPage(1);
                   }}
                 >
                   Stats
@@ -101,6 +113,7 @@ export default function AnimePage(props: RouteProps): JSX.Element {
                 <StyledLink
                   onClick={() => {
                     pushInfoUrl("social");
+                    setCurrentPage(1);
                   }}
                 >
                   Social
@@ -108,6 +121,7 @@ export default function AnimePage(props: RouteProps): JSX.Element {
                 <StyledLink
                   onClick={() => {
                     pushInfoUrl("watch");
+                    setCurrentPage(1);
                   }}
                 >
                   Watch
@@ -149,7 +163,15 @@ export default function AnimePage(props: RouteProps): JSX.Element {
           </div>
         </LeftContent>
         <RightContent>
-          <AnimePageTab tab={tab} relations={relations} name={name} />
+          <AnimePageTab
+            chars={chars}
+            tab={tab}
+            relations={relations}
+            name={name}
+            setCurrentPage={setCurrentPage}
+            isFetching={isFetching}
+            currentPage={currentPage}
+          />
           <div>{data?.Media?.characters?.edges?.map((char) => char?.name)}</div>
         </RightContent>
       </AnimePageContent>
@@ -247,7 +269,6 @@ const TagContainer = styled.div`
 `;
 
 const RightContent = styled.div`
-  background-color: #888;
   text-align: center;
   padding: 20px;
 `;

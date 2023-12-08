@@ -100,8 +100,39 @@ query searchResult($page:Int = 1, $genre:[String], $year:String, $tag:[String], 
     }
 }
 
-query MediaAnime($id: Int) {
+query MediaAnime($id: Int, $page: Int, $language: StaffLanguage) {
     Media (id: $id, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
+        characters(sort: [ROLE, RELEVANCE, ID], page: $page) {
+            edges {
+                id
+                role
+                name
+                voiceActorRoles(sort: [RELEVANCE, ID], language: $language) {
+                    roleNotes
+                    dubGroup
+                    voiceActor {
+                        id
+                        name {
+                            userPreferred
+                        }
+                        language: languageV2
+                        image {
+                            large
+                        }
+                    }
+                }
+                node {
+                    id
+                    name {
+                        userPreferred
+                    }
+                    image {
+                        large
+                    }
+                }
+            }
+        }
+
         id
         description
         season
@@ -129,15 +160,6 @@ query MediaAnime($id: Int) {
             description
         }
         bannerImage
-        characters(perPage:6) {
-            edges{
-                id role name voiceActors(language:JAPANESE)
-                {
-                    id name{userPreferred}language:languageV2 image{large}} node{
-                    id name{userPreferred}image{large}
-                }
-            }
-        }
         coverImage {
             extraLarge
         }
