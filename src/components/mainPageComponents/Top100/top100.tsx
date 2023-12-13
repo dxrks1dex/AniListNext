@@ -15,6 +15,7 @@ import { ListName, ViewAll } from "../TrendingNow/animeComponentTrendingNow";
 import React, { type JSX } from "react";
 import { useTop100Query } from "~/enteris/anime/titleList.g";
 import { useSearchContext } from "~/components/Search/hooks/SearchContext";
+import Link from "next/link";
 
 export const Top100Anime = (): JSX.Element => {
   const { isLoading, error, data } = useTop100Query();
@@ -29,11 +30,18 @@ export const Top100Anime = (): JSX.Element => {
 
   return (
     <>
-      <ListName>
-        TOP 100 ANIME <ViewAll>View All</ViewAll>
-      </ListName>
+      <Link
+        href={{
+          pathname: `search/anime/[top100]`,
+          query: { top100: "top-100" },
+        }}
+      >
+        <ListName>
+          TOP 100 ANIME <ViewAll>View All</ViewAll>
+        </ListName>
+      </Link>
       <Top100AnimeSection>
-        {top100Slice?.map((item, counter: number) => (
+        {top100Slice?.map((item, counter) => (
           <>
             <AnimeTopSection>
               <h2 style={{ color: "#8BA0B2" }}>#{counter + 1}</h2>

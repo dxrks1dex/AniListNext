@@ -39,18 +39,18 @@ export const AnimePageTab = ({
       />
     );
   }
-  if (tab === "stats") {
-    return <>stats</>;
-  }
-  if (tab === "social") {
-    return <>social</>;
-  }
+  // if (tab === "stats") {
+  //   return <>stats</>;
+  // }
+  // if (tab === "social") {
+  //   return <>social</>;
+  // }
   if (tab === "watch") {
     return <Watch name={name} />;
   }
-  if (tab === "reviews") {
-    return <>reviews</>;
-  }
+  // if (tab === "reviews") {
+  //   return <>reviews</>;
+  // }
 };
 
 // export const AnimePageInfo = (info: string | undefined): JSX.Element => {

@@ -20,7 +20,7 @@ export const PopularThisSeason = (): JSX.Element => {
 
   return (
     <>
-      <Link href="search/anime/this-season">
+      <Link href={"/search/anime/this-season"}>
         <ListName>
           POPULAR THIS SEASON <ViewAll>View All</ViewAll>
         </ListName>

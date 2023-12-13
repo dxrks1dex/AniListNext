@@ -11,6 +11,7 @@ import { useScrollListener } from "~/hooks/dom/useScrollListener";
 import { isElementAtBottomOfPage } from "~/utilits/dom/isElementAtBottomOfPage";
 import { Title } from "~/common/queryTitleStyle";
 import Link from "next/link";
+import { TopNumber } from "~/components/mainPageComponents/Top100/top100Style";
 
 export default function TrendingNow() {
   // const [currentPage, setCurrentPage] = useState(1)
@@ -60,8 +61,15 @@ export default function TrendingNow() {
       <Title>TRENDING ANIME</Title>
       <Searcher />
       <SearchResultGrid>
-        {paginatedItemsPrepared?.map((item) => (
-          <AnimeCard key={item.id} {...item} />
+        {paginatedItemsPrepared?.map((item, index) => (
+          <>
+            {GetSearchParams(currentPage).sort === "SCORE_DESC" ? (
+              <TopNumber circleColor={item.coverImage?.color}>
+                {index}
+              </TopNumber>
+            ) : null}
+            <AnimeCard key={item.id} {...item} />
+          </>
         ))}
         {isFetching ? <>Loading...</> : null}
       </SearchResultGrid>

@@ -153,3 +153,18 @@ export const TitleStatsTextStyle = styled.div`
   font-weight: 600;
   font-size: 14px;
 `;
+
+export const TopNumber = styled.div<{ circleColor: string | null | undefined }>`
+  position: absolute;
+
+  width: 50px;
+  height: 50px;
+
+  background-color: ${(props) => props.circleColor};
+
+  border-radius: 50%;
+
+  //left: -25px;
+
+  transform: translateY(-50%);
+`;
