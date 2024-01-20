@@ -1,8 +1,9 @@
-import React, { Dispatch, type JSX } from "react";
+import React, { Dispatch, type JSX, SetStateAction } from "react";
 import Overviewed from "~/components/SinglePageInfo/components/Overviewed";
 import Watch from "~/components/SinglePageInfo/components/Watch";
 import { MediaAnimeQuery } from "~/enteris/anime/titleList.g";
 import Characters from "~/components/SinglePageInfo/components/Characters";
+import { InputMaybe, StaffLanguage } from "~/gql/types.g";
 
 interface props {
   tab: string | undefined;
@@ -12,6 +13,7 @@ interface props {
   setCurrentPage: Dispatch<React.SetStateAction<number>>;
   isFetching: boolean;
   currentPage: number;
+  titleImage: string | null | undefined;
 }
 
 export const AnimePageTab = ({
@@ -22,6 +24,7 @@ export const AnimePageTab = ({
   setCurrentPage,
   isFetching,
   currentPage,
+  titleImage,
 }: props): JSX.Element | undefined => {
   if (tab === undefined) {
     return <Overviewed relations={relations} />;
@@ -46,7 +49,7 @@ export const AnimePageTab = ({
   //   return <>social</>;
   // }
   if (tab === "watch") {
-    return <Watch name={name} />;
+    return <Watch name={name} titleImage={titleImage} />;
   }
   // if (tab === "reviews") {
   //   return <>reviews</>;

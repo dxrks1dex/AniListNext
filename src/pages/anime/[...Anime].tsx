@@ -1,12 +1,12 @@
-// import { useParams, useSearchParams } from 'react-router-dom'
 import styled from "styled-components";
 import { useMediaAnimeQuery } from "~/enteris/anime/titleList.g";
 import { useRouter } from "next/router";
 import { GetStaticPaths } from "next";
 import { AnimePageTab } from "~/components/SinglePageInfo/AnimePageTab";
-import { useCallback } from "react";
+import { ReactElement, useCallback, useEffect, useRef, useState } from "react";
 import { useSearchContext } from "~/components/Search/hooks/SearchContext";
-import { language } from "~/components/SinglePageInfo/components/CharactersFunc/language";
+import { useStaffLanguageContext } from "~/components/SinglePageInfo/components/CharactersFunc/staffLanguageContext";
+import AnimePageLayout from "~/pages/anime/layout";
 
 type RouteProps = { params?: { Anime: string[] } };
 
@@ -25,6 +25,11 @@ export const getStaticPaths: GetStaticPaths<
 };
 
 export default function AnimePage(props: RouteProps) {
+  const [isHover, setIsHover] = useState(false);
+  const [overflowStyle, setOverflowStyle] = useState("hidden");
+  const [fetchedData, setFetchedData] = useState(null);
+  const [readMoreClick, setReadMoreClick] = useState(true);
+
   const {
     data: { currentPage },
     operations: { setCurrentPage },
@@ -48,9 +53,21 @@ export default function AnimePage(props: RouteProps) {
   );
 
   const { isLoading, data, isFetching } = useMediaAnimeQuery(
-    { id: Number(id), page: currentPage, language: language() },
+    {
+      id: Number(id),
+      page: currentPage,
+    },
     { enabled: !!id, keepPreviousData: true },
   );
+
+  const isFetchingRef = useRef(isFetching);
+  isFetchingRef.current = isFetching;
+
+  useEffect(() => {
+    if (!isFetchingRef.current && data) {
+      setFetchedData(data);
+    }
+  }, [data, fetchedData]);
 
   if (!id) return <div>no id...</div>;
   if (isLoading) return <div>Loading...</div>;
@@ -73,15 +90,31 @@ export default function AnimePage(props: RouteProps) {
               />
               <button>Add to List</button>
             </div>
-            <DescriptionGrid>
+            <DescriptionGrid
+              onMouseEnter={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}
+            >
               <HeaderTitle>{data?.Media?.title?.romaji}</HeaderTitle>
               <HeaderDescription
                 dangerouslySetInnerHTML={{
                   __html: data?.Media?.description ?? "",
                 }}
+                overflowStyle={overflowStyle}
               >
                 {null}
               </HeaderDescription>
+              {isHover && readMoreClick ? (
+                <div>
+                  <ReadMoreButton
+                    onClick={() => {
+                      setOverflowStyle("initial");
+                      setReadMoreClick(false);
+                    }}
+                  >
+                    Read More
+                  </ReadMoreButton>
+                </div>
+              ) : null}
               <NavBar>
                 <StyledLink onClick={() => pushInfoUrl(null)}>
                   Overview
@@ -171,6 +204,7 @@ export default function AnimePage(props: RouteProps) {
             setCurrentPage={setCurrentPage}
             isFetching={isFetching}
             currentPage={currentPage}
+            titleImage={data?.Media?.coverImage?.extraLarge}
           />
           <div>{data?.Media?.characters?.edges?.map((char) => char?.name)}</div>
         </RightContent>
@@ -179,11 +213,19 @@ export default function AnimePage(props: RouteProps) {
   );
 }
 
+AnimePage.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <AnimePageLayout>
+      <>{page}</>
+    </AnimePageLayout>
+  );
+};
+
 const AnimePageGrid = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 100%;
-  height: 100vh;
+  //display: grid;
+  //grid-template-rows: 1fr 1fr;
+  //grid-template-columns: 100%;
+  //height: 100vh;
 `;
 
 const AnimePageHeader = styled.div`
@@ -194,20 +236,24 @@ const AnimePageHeader = styled.div`
 const BannerImage = styled.img`
   width: 100%;
 `;
-const HeaderDescription = styled.span`
-  overflow: hidden;
+const HeaderDescription = styled.span<{ overflowStyle: string }>`
+  height: 70%;
+
+  overflow: ${({ overflowStyle }) => overflowStyle};
   text-overflow: ellipsis;
 
   &:hover {
     color: #99adbf;
     transition: 0.2s;
-
-    overflow: initial;
   }
 `;
 const HeaderTitle = styled.h1`
   color: #9fadbd;
+
+  font-size: 1.5rem;
+  font-weight: bold;
 `;
+
 const HeaderGrid = styled.div`
   display: grid;
   grid-template-rows: 1fr;
@@ -219,17 +265,24 @@ const HeaderGrid = styled.div`
 
   background-color: #151f2e;
   color: #728aa1;
+
+  //min-height: 250px;
 `;
+
 const AnimeImage = styled.img`
   border-radius: 5px;
-  width: 185px;
-  height: 265px;
+
+  width: 11.56rem;
+  height: 16.56rem;
 `;
 
 const DescriptionGrid = styled.div`
   display: grid;
-  grid-template-rows: 30%;
+  //grid-template-rows: 30%;
+
+  margin-top: 3%;
 `;
+
 const AnimePageContent = styled.div`
   display: grid;
   grid-template-columns: 30% 70%;
@@ -278,6 +331,9 @@ const NavBar = styled.nav`
 
   display: flex;
   justify-content: space-around;
+
+  padding-top: 2%;
+  padding-bottom: 2%;
 `;
 const StyledLink = styled.nav`
   color: #9fadbd;
@@ -288,4 +344,21 @@ const StyledLink = styled.nav`
   text-decoration: none;
 
   cursor: pointer;
+`;
+
+const ReadMoreButton = styled.button`
+  height: 5%;
+  width: 60%;
+
+  background-color: #151f2e;
+  color: #61dafb;
+
+  opacity: 50%;
+
+  position: absolute;
+  //
+  //margin-top: 15%;
+
+  cursor: pointer;
+  border: none;
 `;

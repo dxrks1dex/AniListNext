@@ -156,9 +156,8 @@ export const TitleStatsTextStyle = styled.div`
 
 export const TopNumber = styled.div<{ circleColor: string | null | undefined }>`
   position: absolute;
-
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 
   background-color: ${(props) => props.circleColor};
 
@@ -167,4 +166,8 @@ export const TopNumber = styled.div<{ circleColor: string | null | undefined }>`
   //left: -25px;
 
   transform: translateY(-50%);
+
+  text-align: center;
+
+  color: black;
 `;

@@ -48,7 +48,6 @@ export type SearchResultQuery = { __typename?: 'Query', Page?: { __typename?: 'P
 export type MediaAnimeQueryVariables = Types.Exact<{
   id?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  language?: Types.InputMaybe<Types.StaffLanguage>;
 }>;
 
 
@@ -272,14 +271,14 @@ export const useSearchResultQuery = <
     )};
 
 export const MediaAnimeDocument = `
-    query MediaAnime($id: Int, $page: Int, $language: StaffLanguage) {
+    query MediaAnime($id: Int, $page: Int) {
   Media(id: $id, type: ANIME) {
     characters(sort: [ROLE, RELEVANCE, ID], page: $page) {
       edges {
         id
         role
         name
-        voiceActorRoles(sort: [RELEVANCE, ID], language: $language) {
+        voiceActorRoles(sort: [RELEVANCE, ID]) {
           roleNotes
           dubGroup
           voiceActor {

@@ -63,12 +63,12 @@ export default function TrendingNow() {
       <SearchResultGrid>
         {paginatedItemsPrepared?.map((item, index) => (
           <>
-            {GetSearchParams(currentPage).sort === "SCORE_DESC" ? (
-              <TopNumber circleColor={item.coverImage?.color}>
-                {index}
-              </TopNumber>
-            ) : null}
-            <AnimeCard key={item.id} {...item} />
+            <AnimeCard
+              key={item.id}
+              {...item}
+              index={index}
+              currentPage={currentPage}
+            />
           </>
         ))}
         {isFetching ? <>Loading...</> : null}

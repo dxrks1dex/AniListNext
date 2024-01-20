@@ -6,6 +6,10 @@ import { isElementAtBottomOfPage } from "~/utilits/dom/isElementAtBottomOfPage";
 import { useScrollListener } from "~/hooks/dom/useScrollListener";
 import { usePaginateData } from "~/hooks/common/usePaginateData";
 import { doubleDelete } from "~/components/Search/searchFunctions/doubleDelete";
+import { useStaffLanguageContext } from "~/components/SinglePageInfo/components/CharactersFunc/staffLanguageContext";
+import { SelectOption } from "~/components/Search/searchFunctions/SelectOption";
+import { GenreOrTagStyleList } from "~/components/Search/searchStyleComponents/genreOrTagStyleComponent";
+import { useOutsideDetect } from "~/hooks/common/useOutsideDetect";
 
 interface props {
   chars: NonNullable<MediaAnimeQuery["Media"]>["characters"];
@@ -20,6 +24,12 @@ export default function Characters({
   currentPage,
 }: props) {
   const [isLanguageList, setIsLanguageList] = useState(false);
+  const [isEncountered, setIsEncountered] = useState(false);
+
+  const {
+    data: { staffLanguage },
+    operations: { setStaffLanguage },
+  } = useStaffLanguageContext();
 
   const isFetchingRef = useRef(isFetching);
   isFetchingRef.current = isFetching;
@@ -42,29 +52,106 @@ export default function Characters({
     [paginatedData],
   );
 
-  const voiceActorLanguage = chars?.edges
-    ?.map(
-      (mediaItem) =>
-        mediaItem?.voiceActorRoles?.map(
-          (actorItem) => actorItem?.voiceActor?.language,
-        ),
-    )
-    .flat();
+  const voiceActorLanguage = useMemo(
+    () =>
+      doubleDelete(
+        chars?.edges
+          ?.map(
+            (mediaItem) =>
+              mediaItem?.voiceActorRoles?.map(
+                (actorItem) => actorItem?.voiceActor?.language,
+              ),
+          )
+          .flat(),
+      ),
+    [chars?.edges],
+  );
+
+  const onLanguageClick = (mediaLanguage) => {
+    setStaffLanguage(mediaLanguage);
+  };
+
+  const isLanguage = (mediaLanguage: string | undefined): boolean => {
+    if (
+      mediaLanguage === undefined ||
+      staffLanguage === undefined ||
+      staffLanguage === null
+    ) {
+      return false;
+    }
+
+    return staffLanguage.includes(mediaLanguage);
+  };
+
+  const wrapperRef = useRef(null);
+  useOutsideDetect(wrapperRef, setIsLanguageList);
+
+  const staffArr = paginatedData.flatMap((item) => {
+    const additionalItem =
+      item?.voiceActorRoles
+        ?.filter((staff) => staff?.voiceActor?.language === staffLanguage)
+        .map((voiceItem) => voiceItem?.voiceActor?.language).length > 1
+        ? { ...item }
+        : null;
+
+    return additionalItem ? [item, additionalItem] : [item];
+  });
+
+  const combitatedArr = [...[staffArr], ...[paginatedData]];
+  paginatedData.map((mediaItem) => (
+    <>
+      <div>{mediaItem?.node?.name?.userPreferred}</div>
+      <div>
+        {mediaItem?.voiceActorRoles?.map((staffItem) => (
+          <>{staffItem?.voiceActor?.language}</>
+        ))}
+      </div>
+    </>
+  ));
+  const onConsoleLog = () => {
+    console.log(
+      paginatedData.map(
+        (item) =>
+          item?.voiceActorRoles
+            ?.filter(
+              (mediaStaff) =>
+                mediaStaff?.voiceActor?.language === staffLanguage,
+            )
+            .map(
+              (mediaStaff) => mediaStaff?.voiceActor?.name?.userPreferred,
+            )[0],
+      ),
+    );
+  };
 
   return (
     <>
-      <div onClick={() => setIsLanguageList(true)} style={{ color: "wheat" }}>
-        Random
+      <div
+        onClick={() => setIsLanguageList(true)}
+        style={{ backgroundColor: "black", color: "wheat", cursor: "pointer" }}
+      >
+        {staffLanguage}
       </div>
       {isLanguageList ? (
-        <select>
-          <option>{doubleDelete(voiceActorLanguage)}</option>
-        </select>
+        <GenreOrTagStyleList ref={wrapperRef} style={{ position: "relative" }}>
+          {voiceActorLanguage?.map((mediaLanguage) => (
+            <SelectOption
+              key={mediaLanguage}
+              onClick={() => {
+                onLanguageClick(mediaLanguage ?? "");
+                onConsoleLog();
+              }}
+              selected={isLanguage(mediaLanguage ?? "")}
+            >
+              {mediaLanguage}
+            </SelectOption>
+          ))}
+        </GenreOrTagStyleList>
       ) : (
         <></>
       )}
       <CharactersGrid>
-        {paginatedCharsPrepared?.map((mediaCharacters) => (
+        {paginatedData?.map((mediaCharacters) => (
           <CardGrid key={mediaCharacters?.node?.id}>
             <Link
               href={{
@@ -85,28 +172,39 @@ export default function Characters({
                 </TextBlock>
               </CharactersCard>
             </Link>
-            {mediaCharacters?.voiceActorRoles?.map((mediaStaff) => (
-              <Link
-                key={mediaStaff?.voiceActor?.id}
-                href={{
-                  pathname: `/staff/[id]/[name]`,
-                  query: {
-                    id: mediaStaff?.voiceActor?.id,
-                    name: mediaStaff?.voiceActor?.name?.userPreferred,
-                  },
-                }}
-              >
-                <CharactersCard>
-                  <TextBlock>
-                    <CharactersName>
-                      {mediaStaff?.voiceActor?.name?.userPreferred}
-                    </CharactersName>
-                    <>{mediaStaff?.voiceActor?.language}</>
-                  </TextBlock>
-                  <CardImg src={mediaStaff?.voiceActor?.image?.large ?? ""} />
-                </CharactersCard>
-              </Link>
-            ))}
+            {
+              mediaCharacters?.voiceActorRoles
+                ?.filter(
+                  (mediaStaff) =>
+                    mediaStaff?.voiceActor?.language === staffLanguage,
+                )
+                .map((mediaItem) => (
+                  <>
+                    <Link
+                      key={mediaItem?.voiceActor?.id}
+                      href={{
+                        pathname: `/staff/[id]/[name]`,
+                        query: {
+                          id: mediaItem?.voiceActor?.id,
+                          name: mediaItem?.voiceActor?.name?.userPreferred,
+                        },
+                      }}
+                    >
+                      <CharactersCard>
+                        <TextBlock>
+                          <CharactersName>
+                            {mediaItem?.voiceActor?.name?.userPreferred}
+                          </CharactersName>
+                          <>{mediaItem?.voiceActor?.language}</>
+                        </TextBlock>
+                        <CardImg
+                          src={mediaItem?.voiceActor?.image?.large ?? ""}
+                        />
+                      </CharactersCard>
+                    </Link>
+                  </>
+                ))[0]
+            }
           </CardGrid>
         ))}
       </CharactersGrid>

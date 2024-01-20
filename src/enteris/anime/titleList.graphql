@@ -100,14 +100,14 @@ query searchResult($page:Int = 1, $genre:[String], $year:String, $tag:[String], 
     }
 }
 
-query MediaAnime($id: Int, $page: Int, $language: StaffLanguage) {
+query MediaAnime($id: Int, $page: Int) {
     Media (id: $id, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
         characters(sort: [ROLE, RELEVANCE, ID], page: $page) {
             edges {
                 id
                 role
                 name
-                voiceActorRoles(sort: [RELEVANCE, ID], language: $language) {
+                voiceActorRoles(sort: [RELEVANCE, ID]) {
                     roleNotes
                     dubGroup
                     voiceActor {
@@ -187,3 +187,4 @@ query MediaAnime($id: Int, $page: Int, $language: StaffLanguage) {
         }
     }
 }
+

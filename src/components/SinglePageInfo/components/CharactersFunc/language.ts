@@ -8,5 +8,7 @@ export const language = (
 ): InputMaybe<StaffLanguage> | undefined => {
   if (languageOption === undefined) {
     return "JAPANESE";
+  } else {
+    return languageOption;
   }
 };
